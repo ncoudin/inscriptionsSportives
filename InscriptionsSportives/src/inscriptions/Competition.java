@@ -7,8 +7,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * ReprÃ©sente une compÃ©tition, c'est-Ã -dire un ensemble de candidats 
- * inscrits Ã  un Ã©vÃ©nement, les inscriptions sont closes Ã  la date dateCloture.
+ * Représente une compétition, c'est-à-dire un ensemble de candidats 
+ * inscrits à un événement, les inscriptions sont closes à la date dateCloture.
  *
  */
 
@@ -31,7 +31,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	}
 	
 	/**
-	 * Retourne le nom de la compÃ©tition.
+	 * Retourne le nom de la compétition.
 	 * @return
 	 */
 	
@@ -41,7 +41,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	}
 	
 	/**
-	 * Modifie le nom de la compÃ©tition.
+	 * Modifie le nom de la compétition.
 	 */
 	
 	public void setNom(String nom)
@@ -57,7 +57,10 @@ public class Competition implements Comparable<Competition>, Serializable
 	
 	public boolean inscriptionsOuvertes()
 	{
-		// TODO retourner vrai si et seulement si la date systÃ¨me est antÃ©rieure Ã  la date de clÃ´ture.
+		// TODO retourner vrai si et seulement si la date système est antérieure à la date de clôture.
+		LocalDate date = LocalDate.now();
+		if(date.isAfter(getDateCloture()))
+			return false;
 		return true;
 	}
 	
@@ -72,7 +75,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	}
 	
 	/**
-	 * Est vrai si et seulement si les inscriptions sont rÃ©servÃ©es aux Ã©quipes.
+	 * Est vrai si et seulement si les inscriptions sont réservées aux équipes.
 	 * @return
 	 */
 	
@@ -89,8 +92,11 @@ public class Competition implements Comparable<Competition>, Serializable
 	
 	public void setDateCloture(LocalDate dateCloture)
 	{
-		// TODO vÃ©rifier que l'on avance pas la date.
-		this.dateCloture = dateCloture;
+		// TODO vérifier que l'on avance pas la date.
+		if (!dateCloture.isAfter(this.dateCloture))
+			this.dateCloture = dateCloture;
+		else
+			System.out.println("Impossible d'avancer la date de cloture !");
 	}
 	
 	/**
@@ -104,8 +110,8 @@ public class Competition implements Comparable<Competition>, Serializable
 	}
 	
 	/**
-	 * Inscrit un candidat de type Personne Ã  la compÃ©tition. Provoque une
-	 * exception si la compÃ©tition est rÃ©servÃ©e aux Ã©quipes ou que les 
+	 * Inscrit un candidat de type Personne à la compétition. Provoque une
+	 * exception si la compétition est réservée aux équipes ou que les 
 	 * inscriptions sont closes.
 	 * @param personne
 	 * @return
@@ -113,16 +119,18 @@ public class Competition implements Comparable<Competition>, Serializable
 	
 	public boolean add(Personne personne)
 	{
-		// TODO vÃ©rifier que la date de clÃ´ture n'est pas passÃ©e
+		// TODO vérifier que la date de clôture n'est pas passée
 		if (enEquipe)
+			throw new RuntimeException();
+		if(!inscriptionsOuvertes())
 			throw new RuntimeException();
 		personne.add(this);
 		return candidats.add(personne);
 	}
 
 	/**
-	 * Inscrit un candidat de type Equipe Ã  la compÃ©tition. Provoque une
-	 * exception si la compÃ©tition est rÃ©servÃ©e aux personnes ou que 
+	 * Inscrit un candidat de type Equipe à la compétition. Provoque une
+	 * exception si la compétition est réservée aux personnes ou que 
 	 * les inscriptions sont closes.
 	 * @param personne
 	 * @return
@@ -130,15 +138,17 @@ public class Competition implements Comparable<Competition>, Serializable
 
 	public boolean add(Equipe equipe)
 	{
-		// TODO vÃ©rifier que la date de clÃ´ture n'est pas passÃ©e
+		// TODO vérifier que la date de clôture n'est pas passée
 		if (!enEquipe)
+			throw new RuntimeException();
+		if(!inscriptionsOuvertes())
 			throw new RuntimeException();
 		equipe.add(this);
 		return candidats.add(equipe);
 	}
 
 	/**
-	 * DÃ©sinscrit un candidat.
+	 * Désinscrit un candidat.
 	 * @param candidat
 	 * @return
 	 */
@@ -150,7 +160,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	}
 	
 	/**
-	 * Supprime la compÃ©tition de l'application.
+	 * Supprime la compétition de l'application.
 	 */
 	
 	public void delete()
