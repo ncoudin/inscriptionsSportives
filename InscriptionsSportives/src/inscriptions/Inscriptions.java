@@ -8,6 +8,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collections;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -243,8 +244,7 @@ public class Inscriptions implements Serializable
 	{
 		
 		Inscriptions inscriptions = Inscriptions.getInscriptions();
-		System.out.println(inscriptions.getEquipes()+"\n");
-		Competition flechettes = inscriptions.createCompetition("Mondial de fléchettes", null, false);
+		Competition flechettes = inscriptions.createCompetition("Mondial de fléchettes",null, false);
 		Personne tony = inscriptions.createPersonne("Tony", "Dent de plomb", "azerty"), 
 				boris = inscriptions.createPersonne("Boris", "le Hachoir", "ytreza");
 		flechettes.add(tony);
