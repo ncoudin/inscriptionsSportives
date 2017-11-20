@@ -244,7 +244,8 @@ public class Inscriptions implements Serializable
 	{
 		
 		Inscriptions inscriptions = Inscriptions.getInscriptions();
-		Competition flechettes = inscriptions.createCompetition("Mondial de flÃ©chettes",null, false);
+		System.out.println(inscriptions.getPersonnes()+"\n");
+		Competition flechettes = inscriptions.createCompetition("Mondial de fléchettes",LocalDate.now(), false);
 		Personne tony = inscriptions.createPersonne("Tony", "Dent de plomb", "azerty"), 
 				boris = inscriptions.createPersonne("Boris", "le Hachoir", "ytreza");
 		flechettes.add(tony);

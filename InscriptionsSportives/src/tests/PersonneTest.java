@@ -1,4 +1,4 @@
-package inscriptions;
+package tests;
 
 import static org.junit.Assert.*;
 
@@ -7,17 +7,14 @@ import java.util.TreeSet;
 
 import org.junit.Test;
 
+import inscriptions.*;
+
 public class PersonneTest {
 
-	private Inscriptions inscriptions;
-	private Personne personne = new Personne(inscriptions, "nomtest", "prenomtest", "mailtest");
+	private Inscriptions inscriptions = Inscriptions.getInscriptions();
+	private Personne personne = inscriptions.createPersonne("nomtest", "prenomtest", "mailtest");
 	private Set<Equipe> equipes = new TreeSet<Equipe>();
 	
-
-	@Test
-	public void testToString() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	public void testGetPrenom() {
