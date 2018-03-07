@@ -244,7 +244,7 @@ public class Inscriptions implements Serializable
 	{
 		
 		Inscriptions inscriptions = Inscriptions.getInscriptions();
-		System.out.println(inscriptions.getPersonnes()+"\n");
+		//System.out.println(inscriptions.getPersonnes()+"\n");
 		Competition flechettes = inscriptions.createCompetition("Mondial de fléchettes",LocalDate.now(), false);
 		Personne tony = inscriptions.createPersonne("Tony", "Dent de plomb", "azerty"), 
 				boris = inscriptions.createPersonne("Boris", "le Hachoir", "ytreza");
@@ -252,9 +252,9 @@ public class Inscriptions implements Serializable
 		Equipe lesManouches = inscriptions.createEquipe("Les Manouches");
 		lesManouches.add(boris);
 		lesManouches.add(tony);
-		System.out.println(inscriptions);
-		lesManouches.delete();
-		System.out.println(inscriptions);
+		//System.out.println(inscriptions);
+		//System.out.println(inscriptions.competitions);
+		System.out.println(flechettes.getCandidats());
 		try
 		{
 			inscriptions.sauvegarder();

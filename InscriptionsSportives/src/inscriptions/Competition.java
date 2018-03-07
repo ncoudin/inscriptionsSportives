@@ -53,9 +53,10 @@ public class Competition implements Comparable<Competition>, Serializable
 	 * Retourne vrai si les inscriptions sont encore ouvertes, 
 	 * faux si les inscriptions sont closes.
 	 * @return
+	 * @throws Exception 
 	 */
 	
-	public boolean inscriptionsOuvertes()
+	public boolean inscriptionsOuvertes() 
 	{
 		// TODO retourner vrai si et seulement si la date système est antérieure à la date de clôture.
 		LocalDate date = LocalDate.now();
