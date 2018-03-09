@@ -66,7 +66,7 @@ public class Dialogue
 		Menu menu = new Menu("Gérer les équipes", "e");
 		menu.add(afficherEquipes());
 		menu.add(ajouterEquipe());
-		//menu.add(selectionnerEquipe());
+		menu.add(selectionnerEquipe());
 		menu.addBack("q");
 		return menu;
 	}
@@ -93,7 +93,7 @@ public class Dialogue
 
 	private Option afficher(final Employee employe)
 	{
-		return new Option("Afficher l'employÃ©", "l", () -> {System.out.println(employe);});
+		return new Option("Afficher l'employe", "l", () -> {System.out.println(employe);});
 	}
 
 	private Option ajouterCompetition()
@@ -108,7 +108,7 @@ public class Dialogue
 	
 	private Option ajouterEmploye(final Department ligue)
 	{
-		return new Option("ajouter un employÃ©", "a",
+		return new Option("ajouter un employe", "a",
 				() -> 
 				{
 					ligue.addEmploye(getString("nom : "), 
@@ -130,10 +130,18 @@ public class Dialogue
 		return menu;
 	}
 	
+	private Menu editerEquipe(Equipe equipe)
+	{
+		Menu menu = new Menu("Editer " + equipe.getNom());
+		menu.add(changerNom(equipe));
+		menu.add(supprimer(equipe));
+		menu.addBack("q");
+		return menu;
+	}
 
 	private Menu editerEmploye(Employee employe)
 	{
-		Menu menu = new Menu("GÃ©rer le compte " + employe.getLastName(), "c");
+		Menu menu = new Menu("Gerer le compte " + employe.getLastName(), "c");
 		menu.add(afficher(employe));
 		menu.add(changerNom(employe));
 		menu.add(changerPrenom(employe));
@@ -173,6 +181,7 @@ public class Dialogue
 				);
 	}		
 	
+	/*on peut ici renommer, supprimmer ou selectionner une compétition.*/
 	private Option changerNom(final Competition competition)
 	{
 		return new Option("Renommer", "r", 
@@ -192,6 +201,29 @@ public class Dialogue
 		return new Option("Supprimer", "d", () -> {competition.delete();});
 	}
 	
+	
+	/*on peut ici renommer, supprimmer ou selectionner une équipe.*/
+	private Option changerNom(final Equipe equipe)
+	{
+		return new Option("Renommer", "r", 
+				() -> {equipe.setNom(getString("Nouveau nom : "));});
+	}
+
+	private List<Equipe> selectionnerEquipe()
+	{
+		return new List<Equipe>("Sélectionner une equipe", "e", 
+				() -> new ArrayList<>(inscriptions.getEquipes()),
+				(element) -> editerEquipe(element)
+				);
+	}
+	
+	private Option supprimer(Equipe equipe)
+	{
+		return new Option("Supprimer", "d", () -> {equipe.delete();});
+	}
+	
+	
+	/*on peut ici renommer, supprimmer ou selectionner un employe.*/
 	private Option changerNom(final Employee employe)
 	{
 		return new Option("Changer le nom", "n", 
