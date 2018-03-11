@@ -54,6 +54,81 @@ public class Dialogue
 		menu.add(afficherCompetitions());
 		menu.add(ajouterCompetition());
 		menu.add(selectionnerCompetition());
+		//menu.add(supprimerCompetition());
+		menu.addBack("q");
+		return menu;
+	}
+	
+	private Menu editerCompetition(Competition competition)
+	{
+		Menu menu = new Menu("Editer " + competition.getNom());
+		menu.add(afficherCandidats(competition));
+		menu.add(selectionnerPersonne(competition));
+		menu.add(supprimerCandidat(competition));
+		menu.add(changerNom(competition));
+		menu.add(supprimer(competition));
+		menu.addBack("q");
+		return menu;
+	}
+	
+	private Menu selectionnerPersonne(Competition competition)
+	{
+		return new List<Personne>("Ajouter une personne", "o", 
+				() -> new ArrayList<>(inscriptions.getPersonnes()),
+				(element) -> editerPersonneCompetition(competition,element)
+				);
+	}
+	
+	private Menu editerPersonneCompetition(Competition competition,Personne personne)
+	{
+		Menu menu = new Menu("Ajouter " + personne.getNom());
+		menu.add(ajouterPersonne(competition,personne));
+		menu.addBack("q");
+		return menu;
+		
+	}
+	
+	private Option ajouterPersonne(Competition competition, Personne personne)
+	{
+		return new Option("Valider", "a", () -> {competition.add(personne);});
+	}
+	
+	private Menu selectionnerEquipe(Competition competition)
+	{
+		return new List<Equipe>("Ajouter une équipe", "e", 
+				() -> new ArrayList<>(inscriptions.getEquipes()),
+				(element) -> editerEquipeCompetition(competition,element)
+				);
+	}
+	
+	private Menu editerEquipeCompetition(Competition competition,Equipe equipe)
+	{
+		Menu menu = new Menu("Ajouter " + equipe.getNom());
+		menu.add(ajouterEquipe(competition,equipe));
+		menu.addBack("q");
+		return menu;
+		
+	}
+	
+	private Option ajouterEquipe(Competition competition, Equipe equipe)
+	{
+		return new Option("Valider", "a", () -> {competition.add(equipe);});
+	}
+	
+	private List<Candidat> supprimerCandidat(final Competition competition)
+	{
+		return new List<Candidat>("Supprimer un candidat", "s", 
+				() -> new ArrayList<>(competition.getCandidats()),
+				(index, element) -> {competition.remove(element);}
+				);
+	}
+	
+	private Menu editerEquipe(Equipe equipe)
+	{
+		Menu menu = new Menu("Editer " + equipe.getNom());
+		menu.add(changerNom(equipe));
+		menu.add(supprimer(equipe));
+		menu.add(membresEquipe(equipe));
 		menu.addBack("q");
 		return menu;
 	}
@@ -115,72 +190,6 @@ public class Dialogue
 		);
 	}
 	
-	private Menu editerCompetition(Competition competition)
-	{
-		Menu menu = new Menu("Editer " + competition.getNom());
-		menu.add(afficherCandidats(competition));
-		menu.add(selectionnerPersonne(competition));
-		menu.add(selectionnerEquipe(competition));
-		//menu.add(supprimerCandidat());
-		menu.add(changerNom(competition));
-		menu.add(supprimer(competition));
-		menu.addBack("q");
-		return menu;
-	}
-	
-	private Menu selectionnerPersonne(Competition competition)
-	{
-		return new List<Personne>("Ajouter une personne", "o", 
-				() -> new ArrayList<>(inscriptions.getPersonnes()),
-				(element) -> editerPersonneCompetition(competition,element)
-				);
-	}
-	
-	private Menu editerPersonneCompetition(Competition competition,Personne personne)
-	{
-		Menu menu = new Menu("Ajouter " + personne.getNom());
-		menu.add(ajouterPersonne(competition,personne));
-		menu.addBack("q");
-		return menu;
-		
-	}
-	
-	private Option ajouterPersonne(Competition competition, Personne personne)
-	{
-		return new Option("Valider", "a", () -> {competition.add(personne);});
-	}
-	
-	private Menu selectionnerEquipe(Competition competition)
-	{
-		return new List<Equipe>("Ajouter une équipe", "e", 
-				() -> new ArrayList<>(inscriptions.getEquipes()),
-				(element) -> editerEquipeCompetition(competition,element)
-				);
-	}
-	
-	private Menu editerEquipeCompetition(Competition competition,Equipe equipe)
-	{
-		Menu menu = new Menu("Ajouter " + equipe.getNom());
-		menu.add(ajouterEquipe(competition,equipe));
-		menu.addBack("q");
-		return menu;
-		
-	}
-	
-	private Option ajouterEquipe(Competition competition, Equipe equipe)
-	{
-		return new Option("Valider", "a", () -> {competition.add(equipe);});
-	}
-	
-	private Menu editerEquipe(Equipe equipe)
-	{
-		Menu menu = new Menu("Editer " + equipe.getNom());
-		menu.add(changerNom(equipe));
-		menu.add(supprimer(equipe));
-		menu.add(membresEquipe(equipe));
-		menu.addBack("q");
-		return menu;
-	}
 
 	private Menu editerEmploye(Employee employe)
 	{
