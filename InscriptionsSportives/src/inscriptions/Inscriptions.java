@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import hibernate.*;
 
 /**
  * Point d'entrÃƒÂ©e dans l'application, un seul objet de type Inscription
@@ -242,17 +243,18 @@ public class Inscriptions implements Serializable
 	
 	public static void main(String[] args)
 	{
-		
+		Passerelle back = new Passerelle();
+		back.open();
 		Inscriptions inscriptions = Inscriptions.getInscriptions();
 		//System.out.println(inscriptions.getPersonnes()+"\n");
-		Competition flechettes = inscriptions.createCompetition("Mondial de fléchettes",LocalDate.now(), false);
-		Personne tony = inscriptions.createPersonne("Tony", "Dent de plomb", "azerty"), 
-				boris = inscriptions.createPersonne("Boris", "le Hachoir", "ytreza");
+//		Competition flechettes = inscriptions.createCompetition("Mondial de fléchettes",LocalDate.now(), false);
+//		Personne tony = inscriptions.createPersonne("Tony", "Dent de plomb", "azerty"), 
+//				boris = inscriptions.createPersonne("Boris", "le Hachoir", "ytreza");
 		Equipe lesManouches = inscriptions.createEquipe("Les Manouches");
 		
 		//System.out.println(inscriptions);
 		//System.out.println(inscriptions.competitions);
-		System.out.println(flechettes.getCandidats());
+		System.out.println(inscriptions.getEquipes());
 		try
 		{
 			inscriptions.sauvegarder();
