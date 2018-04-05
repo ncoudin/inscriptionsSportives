@@ -301,6 +301,5 @@ public class Dialogue
 		Dialogue personnelConsole = new Dialogue(inscriptions);
 		//if (personnelConsole.verifiePassword())
 			personnelConsole.start();
-		
 	}
 }
