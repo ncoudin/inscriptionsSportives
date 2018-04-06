@@ -3,6 +3,10 @@ package inscriptions;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.SortNatural;
 
 /**
  * Représente une Equipe. C'est-à-dire un ensemble de personnes pouvant 
@@ -10,10 +14,17 @@ import java.util.TreeSet;
  * 
  */
 
+@Entity
 public class Equipe extends Candidat
 {
 	private static final long serialVersionUID = 4147819927233466035L;
+	@OneToMany(mappedBy="equipe")
+	@Cascade(value = { CascadeType.ALL })
+    @SortNatural
 	private SortedSet<Personne> membres = new TreeSet<>();
+	@ManyToOne
+	@Cascade(value = { CascadeType.SAVE_UPDATE})
+	private Personne personne;
 	
 	Equipe(Inscriptions inscriptions, String nom)
 	{

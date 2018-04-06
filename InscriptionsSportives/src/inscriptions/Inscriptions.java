@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import dialogue.Dialogue;
 import hibernate.*;
 
 /**
@@ -246,15 +248,9 @@ public class Inscriptions implements Serializable
 		Passerelle back = new Passerelle();
 		back.open();
 		Inscriptions inscriptions = Inscriptions.getInscriptions();
-		//System.out.println(inscriptions.getPersonnes()+"\n");
-//		Competition flechettes = inscriptions.createCompetition("Mondial de fléchettes",LocalDate.now(), false);
-//		Personne tony = inscriptions.createPersonne("Tony", "Dent de plomb", "azerty"), 
-//				boris = inscriptions.createPersonne("Boris", "le Hachoir", "ytreza");
-		Equipe lesManouches = inscriptions.createEquipe("Les Manouches");
-		
-		//System.out.println(inscriptions);
-		//System.out.println(inscriptions.competitions);
-		System.out.println(inscriptions.getEquipes());
+		Dialogue personnelConsole = new Dialogue(inscriptions);
+		personnelConsole.start();
+		back.close();
 		try
 		{
 			inscriptions.sauvegarder();
