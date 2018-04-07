@@ -5,6 +5,10 @@ import java.util.Collections;
 import java.time.LocalDate;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.persistence.*;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.SortNatural;
 
 /**
  * Représente une compétition, c'est-à-dire un ensemble de candidats 
@@ -12,12 +16,24 @@ import java.util.TreeSet;
  *
  */
 
+@Entity
 public class Competition implements Comparable<Competition>, Serializable
 {
+	@Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
 	private static final long serialVersionUID = -2882150118573759729L;
+	@Transient
 	private Inscriptions inscriptions;
 	private String nom;
+	@OneToMany(mappedBy="competition")
+	@Cascade(value = { CascadeType.ALL })
+    @SortNatural
 	private Set<Candidat> candidats;
+	@ManyToOne
+	@Cascade(value = { CascadeType.SAVE_UPDATE})
+	private Candidat candidat;
+	
 	private LocalDate dateCloture;
 	private boolean enEquipe = false;
 

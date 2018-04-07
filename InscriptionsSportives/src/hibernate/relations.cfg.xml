@@ -17,15 +17,15 @@
 			root</property>
 
     <!-- Comportement pour la conservation des tables -->
-<!--     <property name="hbm2ddl.auto">create</property>
+   		<property name="hbm2ddl.auto">create</property>
 
         <property name="hibernate.show_sql">false</property>
         <property name="jta.UserTransaction">
         	java:comp/UserTransaction</property>
-        <mapping class="hibernate.relations.Client" />
-        <mapping class="hibernate.relations.Commande" />
-        <mapping class="hibernate.relations.Produit" />
-        <mapping class="hibernate.relations.DetailCommande" /> -->
+        <mapping class="inscriptions.Personne" />
+        <mapping class="inscriptions.Equipe" />
+        <mapping class="inscriptions.Candidat" />
+        <mapping class="inscriptions.Competition" />
          
     </session-factory>
 </hibernate-configuration>
