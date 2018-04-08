@@ -295,4 +295,13 @@ public class Dialogue
             );
     }
 	
+	public static void main(String[] args)
+		{
+	Inscriptions inscriptions = Inscriptions.getInscriptions();
+			Dialogue personnelConsole = new Dialogue(inscriptions);
+			//if (personnelConsole.verifiePassword())
+				personnelConsole.start();
+			
+		}
+	
 }
