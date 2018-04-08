@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Date;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.SortedSet;
@@ -92,10 +93,11 @@ public class Inscriptions implements Serializable
 	 */
 	
 	public Competition createCompetition(String nom, 
-			LocalDate dateCloture, boolean enEquipe)
+			Date dateCloture, boolean enEquipe)
 	{
 		Competition competition = new Competition(this, nom, dateCloture, enEquipe);
 		competitions.add(competition);
+		Passerelle.save(competition);
 		return competition;
 	}
 
@@ -113,6 +115,7 @@ public class Inscriptions implements Serializable
 	{
 		Personne personne = new Personne(this, nom, prenom, mail);
 		candidats.add(personne);
+		Passerelle.save(personne);
 		return personne;
 	}
 	
@@ -129,17 +132,20 @@ public class Inscriptions implements Serializable
 	{
 		Equipe equipe = new Equipe(this, nom);
 		candidats.add(equipe);
+		Passerelle.save(equipe);
 		return equipe;
 	}
 	
 	void remove(Competition competition)
 	{
 		competitions.remove(competition);
+		Passerelle.delete(competition);
 	}
 	
 	void remove(Candidat candidat)
 	{
 		candidats.remove(candidat);
+		Passerelle.delete(candidat);
 	}
 	
 	/**
@@ -165,7 +171,7 @@ public class Inscriptions implements Serializable
 	 * et candidats dÃ©jÃ  existants.
 	 */
 	
-	public Inscriptions reinitialiser()
+	public static Inscriptions reinitialiser()
 	{
 		inscriptions = new Inscriptions();
 		return getInscriptions();
@@ -247,7 +253,7 @@ public class Inscriptions implements Serializable
 	{
 		Passerelle back = new Passerelle();
 		back.open();
-		Inscriptions inscriptions = Inscriptions.getInscriptions();
+		Inscriptions inscriptions = Inscriptions.reinitialiser();
 		Dialogue personnelConsole = new Dialogue(inscriptions);
 		personnelConsole.start();
 		back.close();

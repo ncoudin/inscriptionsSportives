@@ -8,6 +8,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.SortNatural;
 
+import hibernate.Passerelle;
+
 /**
  * Représente une personne physique pouvant s'inscrire à une compétition.
  */
@@ -17,13 +19,10 @@ public class Personne extends Candidat
 {
 	private static final long serialVersionUID = 4434646724271327254L;
 	private String prenom, mail;
-	@OneToMany(mappedBy="personne")
+	@OneToMany(targetEntity=Personne.class, mappedBy = "equipes", fetch=FetchType.EAGER)
 	@Cascade(value = { CascadeType.ALL })
     @SortNatural
 	private Set<Equipe> equipes;
-	@ManyToOne
-	@Cascade(value = { CascadeType.SAVE_UPDATE})
-	private Equipe equipe;
 
 	
 	Personne(Inscriptions inscriptions, String nom, String prenom, String mail)
@@ -52,6 +51,7 @@ public class Personne extends Candidat
 	public void setPrenom(String prenom)
 	{
 		this.prenom = prenom;
+		Passerelle.save(this);
 	}
 
 	/**
@@ -72,6 +72,7 @@ public class Personne extends Candidat
 	public void setMail(String mail)
 	{
 		this.mail = mail;
+		Passerelle.save(this);
 	}
 
 	/**
@@ -86,11 +87,15 @@ public class Personne extends Candidat
 	
 	boolean add(Equipe equipe)
 	{
+		equipes.add(equipe);
+		Passerelle.save(equipe);
 		return equipes.add(equipe);
 	}
 
 	boolean remove(Equipe equipe)
 	{
+		equipes.remove(equipe);
+		Passerelle.delete(equipe);
 		return equipes.remove(equipe);
 	}
 	
@@ -99,7 +104,8 @@ public class Personne extends Candidat
 	{
 		super.delete();
 		for (Equipe e : equipes)
-			e.remove(this);
+			//e.remove(this);
+			Passerelle.delete(this);
 	}
 	
 	@Override

@@ -3,9 +3,13 @@ package dialogue;
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 import static commandLineMenus.rendering.examples.util.InOut.getInt;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
+
 import commandLineMenus.*;
 import commandLineMenus.rendering.examples.util.InOut;
 import inscriptions.*;
@@ -140,10 +144,17 @@ public class Dialogue
 	private Option ajouterCompetition()
 	{
 		return new Option("Ajouter une compétition", "a", () -> {
-			final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-			String dateCloture = InOut.getString("Entrer la date de clôture des inscriptions de la compétition : ");
-	        final LocalDate localDate = LocalDate.parse(dateCloture, DATE_FORMAT);
-			inscriptions.createCompetition(getString("nom : "),localDate,getInt("0 - Compétition de personnes \n1 - Compétition d'équipes : ")==0);});
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String dateCloture = InOut.getString("Entrez la date de clôture 'yyyy-MM-dd' : ");
+			Date localDate;
+			try {
+				localDate = formatter.parse(dateCloture);
+				inscriptions.createCompetition(getString("nom : "),localDate,getInt("0 - Compétition de personnes \n1 - Compétition d'équipes : ")==0);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	private Option ajouterEquipe()
@@ -294,14 +305,5 @@ public class Dialogue
                 }
             );
     }
-	
-	public static void main(String[] args)
-		{
-	Inscriptions inscriptions = Inscriptions.getInscriptions();
-			Dialogue personnelConsole = new Dialogue(inscriptions);
-			//if (personnelConsole.verifiePassword())
-				personnelConsole.start();
-			
-		}
 	
 }

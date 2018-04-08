@@ -2,13 +2,15 @@ package inscriptions;
 
 import java.io.Serializable;
 import java.util.Collections;
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.persistence.*;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.SortNatural;
+
+import hibernate.Passerelle;
 
 /**
  * Représente une compétition, c'est-à-dire un ensemble de candidats 
@@ -26,18 +28,15 @@ public class Competition implements Comparable<Competition>, Serializable
 	@Transient
 	private Inscriptions inscriptions;
 	private String nom;
-	@OneToMany(mappedBy="competition")
+	@ManyToMany
 	@Cascade(value = { CascadeType.ALL })
     @SortNatural
 	private Set<Candidat> candidats;
-	@ManyToOne
-	@Cascade(value = { CascadeType.SAVE_UPDATE})
-	private Candidat candidat;
 	
-	private LocalDate dateCloture;
+	private Date dateCloture;
 	private boolean enEquipe = false;
 
-	Competition(Inscriptions inscriptions, String nom, LocalDate dateCloture, boolean enEquipe)
+	Competition(Inscriptions inscriptions, String nom, Date dateCloture, boolean enEquipe)
 	{
 		this.enEquipe = enEquipe;
 		this.inscriptions = inscriptions;
@@ -63,6 +62,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	public void setNom(String nom)
 	{
 		this.nom = nom ;
+		Passerelle.save(this);
 	}
 	
 	/**
@@ -75,9 +75,9 @@ public class Competition implements Comparable<Competition>, Serializable
 	public boolean inscriptionsOuvertes() 
 	{
 		// TODO retourner vrai si et seulement si la date système est antérieure à la date de clôture.
-		LocalDate date = LocalDate.now();
+		Date date = new Date();
 		try {
-		if(date.isAfter(getDateCloture()))
+		if(date.after(getDateCloture()))
 			return false;
 		}
 		catch(Exception e)
@@ -92,7 +92,7 @@ public class Competition implements Comparable<Competition>, Serializable
 	 * @return
 	 */
 	
-	public LocalDate getDateCloture()
+	public Date getDateCloture()
 	{
 		return dateCloture;
 	}
@@ -113,11 +113,14 @@ public class Competition implements Comparable<Competition>, Serializable
 	 * @param dateCloture
 	 */
 	
-	public void setDateCloture(LocalDate dateCloture)
+	public void setDateCloture(Date dateCloture)
 	{
 		// TODO vérifier que l'on avance pas la date.
-		if (!dateCloture.isAfter(this.dateCloture))
+		if (!dateCloture.after(this.dateCloture))
+		{
+			Passerelle.save(this);
 			this.dateCloture = dateCloture;
+		}
 		else
 			System.out.println("Impossible d'avancer la date de cloture !");
 	}
@@ -148,6 +151,8 @@ public class Competition implements Comparable<Competition>, Serializable
 		if(!inscriptionsOuvertes())
 			throw new RuntimeException();
 		personne.add(this);
+		candidats.add(personne);
+		Passerelle.save(personne);
 		return candidats.add(personne);
 	}
 
@@ -167,6 +172,8 @@ public class Competition implements Comparable<Competition>, Serializable
 		if(!inscriptionsOuvertes())
 			throw new RuntimeException();
 		equipe.add(this);
+		candidats.add(equipe);
+		Passerelle.save(equipe);
 		return candidats.add(equipe);
 	}
 
@@ -179,6 +186,8 @@ public class Competition implements Comparable<Competition>, Serializable
 	public boolean remove(Candidat candidat)
 	{
 		candidat.remove(this);
+		candidats.remove(candidat);
+		Passerelle.delete(candidat);
 		return candidats.remove(candidat);
 	}
 	
@@ -190,7 +199,8 @@ public class Competition implements Comparable<Competition>, Serializable
 	{
 		for (Candidat candidat : candidats)
 			remove(candidat);
-		inscriptions.remove(this);
+		//inscriptions.remove(this);
+		Passerelle.delete(this);
 	}
 	
 	@Override

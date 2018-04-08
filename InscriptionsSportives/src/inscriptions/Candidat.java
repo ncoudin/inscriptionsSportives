@@ -9,6 +9,8 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.SortNatural;
 
+import hibernate.Passerelle;
+
 /**
  * Candidat à un événement sportif, soit une personne physique, soit une équipe.
  *
@@ -25,13 +27,10 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	@Transient
 	private Inscriptions inscriptions;
 	private String nom;
-	@OneToMany(mappedBy="candidat")
+	@OneToMany(targetEntity=Candidat.class, mappedBy = "competitions", fetch=FetchType.EAGER)
 	@Cascade(value = { CascadeType.ALL })
     @SortNatural
 	private Set<Competition> competitions;
-	@ManyToOne
-	@Cascade(value = { CascadeType.SAVE_UPDATE})
-	private Competition competition;
 	
 	Candidat(Inscriptions inscriptions, String nom)
 	{
@@ -58,6 +57,7 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	public void setNom(String nom)
 	{
 		this.nom = nom;
+		Passerelle.save(this);
 	}
 
 	/**
@@ -72,11 +72,15 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	
 	boolean add(Competition competition)
 	{
+		competitions.add(competition);
+		Passerelle.save(competition);
 		return competitions.add(competition);
 	}
 
 	boolean remove(Competition competition)
 	{
+		competitions.remove(competition);
+		Passerelle.delete(competition);
 		return competitions.remove(competition);
 	}
 
@@ -88,7 +92,8 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	{
 		for (Competition c : competitions)
 			c.remove(this);
-		inscriptions.remove(this);
+		//inscriptions.remove(this);
+		Passerelle.delete(this);
 	}
 	
 	@Override
