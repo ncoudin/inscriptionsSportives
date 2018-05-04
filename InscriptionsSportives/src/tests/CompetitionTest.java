@@ -2,8 +2,8 @@ package tests;
 
 import static org.junit.Assert.*;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
+import java.util.Date;
+
 
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ import inscriptions.Personne;
 public class CompetitionTest {
 
 	private Inscriptions inscriptions = Inscriptions.getInscriptions();
-	private Competition competition = inscriptions.createCompetition("nomtest", LocalDate.now(), false);
+	private Competition competition = inscriptions.createCompetition("nomtest", (), false);
 	
 	@Test
 	public void testGetNom() {

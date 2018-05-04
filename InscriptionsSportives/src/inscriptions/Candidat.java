@@ -27,7 +27,7 @@ public abstract class Candidat implements Comparable<Candidat>, Serializable
 	@Transient
 	private Inscriptions inscriptions;
 	private String nom;
-	@OneToMany(targetEntity=Candidat.class, mappedBy = "competitions", fetch=FetchType.EAGER)
+	@ManyToMany(targetEntity=Competition.class, mappedBy = "candidats", fetch=FetchType.EAGER)
 	@Cascade(value = { CascadeType.ALL })
     @SortNatural
 	private Set<Competition> competitions;
